@@ -1,4 +1,4 @@
-from django.shortcuts import HttpResponse
+from django.shortcuts import render
 from django.conf import settings
 import time
 import redis
@@ -19,4 +19,4 @@ def get_hit_count():
 
 def homePageView(request):
     count = get_hit_count()
-    return HttpResponse('Hello World! I have been seen {} times.\n'.format(count))
+    return render(request, "index.html", context={})
