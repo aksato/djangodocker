@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#j+t6s3w9d5pxjo_4ymdzy)=e02fx!97i_qhwqxz$#v_vbahw#'
+SECRET_KEY = '!&4ge6_h52$3h8n&cvjq(n04t%4^#k0o-hi(zknb()^%p-+8!p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pages', # new
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REDIS_HOST = 'redis'
+REDIS_PORT = 6379
