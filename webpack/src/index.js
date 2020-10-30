@@ -5,11 +5,13 @@ import ReactDOM from 'react-dom'
 const App = () => {
   const [count, setCount] = React.useState(0)
   const onClick = () => setCount(c => c + 1)
-  return React.createElement('div', null,
-    React.createElement('h1', null, 'The count is ' + count),
-    React.createElement('button', { onClick: onClick }, 'Count'),
+  return (
+    <div>
+      <h1>The count is {count}</h1>
+      <button onClick={onClick}>Count</button>
+    </div>
   )
 }
 // Mount the app to the mount point.
 const root = document.getElementById('app')
-ReactDOM.render(React.createElement(App, null, null), root)
+ReactDOM.render(<App />, root)

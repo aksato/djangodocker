@@ -27,5 +27,13 @@ module.exports = {
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000
-  }
+  },
+  // Add a rule so Webpack reads JS with Babel
+  module: { rules: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: ['babel-loader'],
+    },
+  ]}
 }
