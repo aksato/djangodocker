@@ -8,21 +8,6 @@ $ docker-compose run web django-admin startproject <project_name> .
 ```bash
 sudo chown -R $USER:$USER .
 ```
-* Abrir `<project_name>/settings.py` e substituir:
-```python
-# settings.py
-   
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
-    }
-}
-```
 * Finalmente, executar:
 ```bash
 $ docker-compose up
