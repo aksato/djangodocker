@@ -1,17 +1,14 @@
-{% load static %}
+{% load render_bundle from webpack_loader %}
 
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+  </head>
 
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
-</head>
-
-<body>
-    <div id="app">
-        <h1>Hello world!</h1>
-        <button id="click">Click me :)</button>
-    </div>
-    <script src="{% static 'build/main.js' %}"></script>
-</body>
-
+  <body>
+    <div id="app"></div>
+    {% render_bundle 'main' %}
+  </body>
 </html>

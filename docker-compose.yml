@@ -17,14 +17,14 @@ services:
     volumes:
       - ./webpack:/app
       - node-modules:/app/node_modules
-      - webpack_build:/app/build
+      - webpack_build:/app/assets/bundles
   
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
-      - webpack_build:/code/static/build
+      - webpack_build:/code/assets/bundles
     ports:
       - "8000:8000"
     env_file:

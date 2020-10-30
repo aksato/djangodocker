@@ -1,19 +1,23 @@
 const path = require('path')
-const webpack = require('webpack')
+var BundleTracker = require('webpack-bundle-tracker')
+
 module.exports = {
   // Where Webpack looks to load your JavaScript
   entry: {
-    main: path.resolve(__dirname, 'src/index.js'),
+    main: path.resolve(__dirname, 'assets/js/index.js'),
   },
   mode: 'development',
   // Where Webpack spits out the results (the myapp static folder)
   output: {
-    path: path.resolve(__dirname, './build'),
-    filename: '[name].js',
+    path: path.resolve(__dirname, './assets/bundles/'),
+    filename: '[name]-[hash].js',
   },
   plugins: [
-    // Don't output new files if there is an error
-    new webpack.NoEmitOnErrorsPlugin(),
+    new BundleTracker({
+      path: __dirname,
+      filename: './assets/bundles/webpack-stats.json',
+      publicPath: '/static/bundles/'
+    }),
   ],
   // Where find modules that can be imported (eg. React) 
   resolve: {
