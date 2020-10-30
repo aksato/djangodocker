@@ -1,4 +1,4 @@
-# Comandos para criar uma aplicação utilizando Redis com Docker
+# Comandos para criar uma aplicação utilizando Postgres com Docker
 * Para criar um novo projeto Django:
 ```bash
 $ docker-compose run web django-admin startproject <project_name> .
@@ -7,7 +7,29 @@ $ docker-compose run web django-admin startproject <project_name> .
 ```bash
 sudo chown -R $USER:$USER .
 ```
-* Vamos realizar as migrações de banco de dados, execute:
+* Primeiro devemos configurar o banco de dados. Para tal, edite o arquivo `<project_name>/settings.py`
+```python
+# <project_name>/settings.py
+import os # new
+
+...
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': 5432,
+    }
+}
+```
+* Vamos realizar as migrações de banco de dados. Primeiro, vamos rodar o container do Postgres:
+```bash
+$ docker-compose up -d database
+```
+* Depois, execute:
 ```bash
 $ docker-compose run web python manage.py migrate
 ```
@@ -17,84 +39,24 @@ $ docker-compose up
 ```
 * Abrir <http://localhost:8000> e verificar se está rodando.
 * Pare o servidor com <kbd>Ctrl</kbd>+<kbd>C</kbd>
-* Criar a aplicação `pages` para o nosso projeto Django:
-  * Executar
-  ```bash
-  $ docker-compose run web python manage.py startapp pages
-  ```
-  * E editar arquivo `<project_name>/settings.py`
-  ```python
-  # <project_name>/settings.py
-    INSTALLED_APPS = [
-        'django.contrib.admin',
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-        'pages', # new
-    ]
-  ```
-* Configurar variáveis de configuração do Redis: inserir no final do arquivo `<project_name>/settings.py`
-```python
-# <project_name>/settings.py
-REDIS_HOST = 'redis'
-REDIS_PORT = 6379
+* Para testar o banco de dados, vamos criar usuários. O Django já vem com uma tabela de usuários implementada. Para modificá-la, vamos utilizar o modo *admin*. Para tal, precisamos criar um usuário super com o comando:
+```bash
+$ docker-compose run web python manage.py createsuperuser
 ```
-* Lembrando que o fluxo do Django segue a lógica 
-```
-URL -> View -> Model (typically) -> Template
-```
-* Primeiramente, vamos criar a view (poderia ser em qualquer ordem). Edite o arquivo `pages/views.py`
-```python
-# pages/views.py
-from django.shortcuts import HttpResponse
-from django.conf import settings
-import time
-import redis
-
-# connect to our Redis instance
-cache = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
-
-def get_hit_count():
-    retries = 5
-    while True:
-        try:
-            return cache.incr('hits')
-        except redis.exceptions.ConnectionError as exc:
-            if retries == 0:
-                raise exc
-            retries -= 1
-            time.sleep(0.5)
-
-def homePageView(request):
-    count = get_hit_count()
-    return HttpResponse('Hello World! I have been seen {} times.\n'.format(count))
-```
-* Agora, vamos editar a URL
-  * Crie o arquivo `pages/urls.py` com o conteúdo
-  ```python
-  # pages/urls.py
-  from django.urls import path
-  from .views import homePageView
-
-  urlpatterns = [
-    path('', homePageView, name='home')
-  ]
-  ```
-  * E edite o arquivo `<project_name>/urls.py`
-  ```python
-  # <project_name>/urls.py
-  from django.contrib import admin
-  from django.urls import path, include # new
-  
-  urlpatterns = [
-      path('admin/', admin.site.urls),
-      path('', include('pages.urls')), # new
-  ]
-  ```
-  * Finalmente, executar:
+* Escolha o nome e senha que desejar.
+* Para testar, execute novamente:
 ```bash
 $ docker-compose up
 ```
-* Abrir <http://localhost:8000> e verificar se está rodando. A cada vez que recarregar a página, o contador deve aumentar.
+* Agora, abra <http://localhost:8000/admin> no browser para acessar o painel de administração.
+* Adicione alguns usuários novos.
+* Pare o servidor com <kbd>Ctrl</kbd>+<kbd>C</kbd>
+* Para e destrua todos os contêineres com
+```bash
+$ docker-compose down
+```
+* Reinicie todos os serviços com:
+```bash
+$ docker-compose up
+```
+* E confira em <http://localhost:8000/admin> se todos os usuários estão lá.
