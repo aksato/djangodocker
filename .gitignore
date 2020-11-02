@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 # Ignore SQlite3 Database file
 *.sqlite3
+# Ignode node module
+node_modules

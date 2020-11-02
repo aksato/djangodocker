@@ -7,7 +7,7 @@ services:
   database:
     image: postgres:9.6
     env_file:
-      - .env/development/database
+      - env/development/database
     volumes:
       - db_data:/var/lib/postgresql/data
   
@@ -15,26 +15,23 @@ services:
     build: ./webpack
     command: ["npm", "start"]
     volumes:
-      - ./webpack:/app
       - node-modules:/app/node_modules
-      - webpack_build:/app/assets/bundles
+      - ./${STATICFILES_DIRNAME}:/app/${STATICFILES_DIRNAME}/
   
   web:
     build: .
     command: bash -c 'while !</dev/tcp/database/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
       - .:/code
-      - webpack_build:/code/assets/bundles
+      - ./${STATICFILES_DIRNAME}:/code/${STATICFILES_DIRNAME}/
     ports:
       - "8000:8000"
     env_file:
-      - .env/development/database
-      - .env/development/web
+      - env/development/database
+      - env/development/web
     depends_on:
-      - redis
       - database
 
 volumes:
   db_data:
   node-modules:
-  webpack_build:
