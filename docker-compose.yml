@@ -31,8 +31,6 @@ services:
     env_file:
       - env/development/database
       - env/development/web
-    depends_on:
-      - database
 
 volumes:
   db_data:
