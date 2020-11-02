@@ -10,7 +10,7 @@ module.exports = {
   // Where Webpack spits out the results (the myapp static folder)
   output: {
     path: path.resolve(__dirname, './assets/bundles/'),
-    filename: '[name]-[hash].js',
+    filename: '[name].js',
   },
   plugins: [
     new BundleTracker({

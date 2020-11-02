@@ -26,6 +26,8 @@ services:
       - ./${STATICFILES_DIRNAME}:/code/${STATICFILES_DIRNAME}/
     ports:
       - "8000:8000"
+    environment:
+        - STATICFILES_DIRNAME=${STATICFILES_DIRNAME}
     env_file:
       - env/development/database
       - env/development/web
