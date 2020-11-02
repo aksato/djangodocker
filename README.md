@@ -40,14 +40,14 @@ $ docker-compose run web python manage.py migrate
 ```
 * Finalmente, executar:
 ```bash
-$ docker-compose up
+$ docker-compose up web
 ```
-* Abrir <http://localhost:8000> e verificar se está rodando.
+* Abrir <http://localhost:8000> e verificar se está rodando (Deve aparecer a página inicial do Django).
 * Pare o servidor com <kbd>Ctrl</kbd>+<kbd>C</kbd>
 * Agora podemos configurar o Webpack. No arquivo `<project_name>/settings.py`, adicione
 ```python
 # <project_name>/settings.py
-import os # new
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -185,7 +185,7 @@ Hello.propTypes = {
 
 ReactDOM.render(
     <React.StrictMode>
-        <Hello name="Seu nome" />
+        <Hello name="World" />
     </React.StrictMode>,
     document.getElementById('root')
 );
@@ -219,4 +219,4 @@ $ docker-compose up -d
 ```bash
 $ docker-compose exec webpack npm install prop-types
 ```
-* Abrir <http://localhost:8000> e verificar se está rodando. Modificar o atributo `name` do compoente React `Hello` em `assets/js/index.js` e recarregue para verificar o que foi mudado.
+* Abrir <http://localhost:8000> e verificar se está rodando. Modificar o atributo `name` do componente React `Hello` em `assets/js/index.js` e recarregue para verificar o que foi mudado.
